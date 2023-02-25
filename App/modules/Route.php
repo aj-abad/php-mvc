@@ -2,7 +2,7 @@
 
 namespace App\Modules;
 
-enum Action: string
+enum RequestMethod: string
 {
   case GET = 'GET';
   case POST = 'POST';
@@ -21,28 +21,35 @@ class Route
 
   private static $namedRoutes = [];
 
-  public static function register(Action $action, string $route, string $controller, string $method): Route
+  public string $route = '';
+
+  public static function getNamed(string $name): Route
   {
-    //if route already exists
-    if (array_key_exists($route, self::$allRoutes[$action->value])) {
-      throw new \Exception('Route already exists: ' . $route);
-    }
-    self::$allRoutes[$action->value][$route] = [
-      'controller' => $controller,
-      'method' => $method
-    ];
-
-
-    return new Route();
+    return self::$namedRoutes[$name];
   }
 
-  public function __construct()
+  public static function register(RequestMethod $requestMethod, string $route, string $controller, string $action): Route
   {
+    //if route already exists
+    if (array_key_exists($route, self::$allRoutes[$requestMethod->value])) {
+      throw new \Exception('Route already exists: ' . $route);
+    }
+    self::$allRoutes[$requestMethod->value][$route] = [
+      'controller' => $controller,
+      'action' => $action
+    ];
+
+    return new Route($route);
+  }
+
+  public function __construct(string $route)
+  {
+    $this->route = $route;
   }
 
   public function named(string $name)
   {
-    self::$namedRoutes[$name] = $this;
+    self::$namedRoutes[$name] = $this->route;
     return $this;
   }
 }
