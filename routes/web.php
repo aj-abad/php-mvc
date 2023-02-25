@@ -1,7 +1,9 @@
 <?php
-
-use App\Modules\Action;
+use App\Modules\RequestMethod;
 use App\Modules\Route;
 
-Route::register(Action::GET, '/', 'Home', 'index')->named('home');
-Route::register(Action::GET, '/about', 'Home', 'about')->named('about');
+Route::register(RequestMethod::GET, '/', HomeController::class, 'index')->named('home');
+Route::register(RequestMethod::GET, '/about', HomeController::class, 'about')->named('about');
+Route::register(RequestMethod::GET, '/json-using-method', HomeController::class, 'testJson')->named('about');
+Route::register(RequestMethod::GET, '/json', HomeController::class, 'testJson')->named('about');
+
