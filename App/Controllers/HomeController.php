@@ -6,7 +6,10 @@ class HomeController extends Controller
 {
   public function index()
   {
-    return $this->view('home');
+    $data = [
+      'name' => '<script>alert(1)</script>'
+    ];
+    return $this->view('home', $data);
   }
 
   public function about()
