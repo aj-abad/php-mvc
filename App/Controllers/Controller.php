@@ -21,4 +21,11 @@ class Controller
     }
     $this->{$action}();
   }
+
+  protected function json($object): void
+  {
+    header('Content-Type: application/json');
+    echo json_encode($object);
+    die();
+  }
 }
