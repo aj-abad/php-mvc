@@ -6,11 +6,17 @@ class HomeController extends Controller
 {
   public function index()
   {
-    $this->view('home');
+    return $this->view('home');
   }
 
   public function about()
   {
-    $this->redirect('index');
+    return $this->redirect('index');
+  }
+
+  public function testJson()
+  {
+    $obj = ['Hello' => 'World'];
+    return $this->json($obj);
   }
 }
