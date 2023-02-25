@@ -5,10 +5,11 @@ Pretty basic MVC framework
 
   
 #### Features
-- Routing
+- Routing with named routes
 - Views
 
 #### To-dos
+- Add more documentation
 - Database connectivity
 - Reusable layouts
 - Middleware
