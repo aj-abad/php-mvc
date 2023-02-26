@@ -39,14 +39,6 @@ class Controller
     $this->layout = $layoutName;
   }
 
-  protected function redirect(string $action): void
-  {
-    if (!is_callable([$this, $action])) {
-      throw new \Exception('Action not found: ' . $action);
-    }
-    $this->{$action}();
-  }
-
   protected function json($object): void
   {
     header('Content-Type: application/json');

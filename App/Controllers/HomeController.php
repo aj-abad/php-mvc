@@ -4,22 +4,30 @@ namespace App\Controllers;
 
 class HomeController extends Controller
 {
-  public function index()
+  public function index(Controller $controller)
   {
     $data = [
-      'name' => '<script>alert(1)</script>'
+      'name' => $controller::class,
     ];
     return $this->view('home', $data);
   }
 
   public function about()
   {
-    return $this->redirect('index');
+    return $this->view('about');
   }
 
   public function testJson()
   {
     $obj = ['Hello' => 'World'];
     return $this->json($obj);
+  }
+
+  public function test(Controller $controller, $id)
+  {
+    $data = [
+      'id' => $id,
+    ];
+    return $data;
   }
 }

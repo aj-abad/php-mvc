@@ -2,7 +2,8 @@
 
 use App\Modules\Route;
 
-// custom psr-4 autoloader
+// register class autoloaders
+require('vendor/autoload.php');
 spl_autoload_register(
   function ($class) {
     $class_path = str_replace('\\', '/', $class);
@@ -26,30 +27,55 @@ if (isset($_GET['__path'])) {
   }
 }
 
-// register routes
-include 'routes/web.php';
-include 'routes/api.php';
+try {
+  // register routes
+  include 'routes/web.php';
+  include 'routes/api.php';
 
-// sanitize URI
-$requestUri = $_SERVER['REQUEST_URI'];
-$requestUri = preg_replace('/\/+/', '/', $requestUri);
-$requestUri = explode('?', $requestUri)[0];
-$method = $_SERVER['REQUEST_METHOD'];
+  // create dependency injection container for controllers
+  $container = new DI\Container();
 
-// get the route action
-$routeAction = @Route::$allRoutes[$method][$requestUri] ?? null;
+  // sanitize URI
+  $requestUri = $_SERVER['REQUEST_URI'];
+  $requestUri = rtrim($requestUri, '/');
+  $requestUri = preg_replace('/\/+/', '/', $requestUri);
+  $requestUri = explode('?', $requestUri)[0];
+  $method = $_SERVER['REQUEST_METHOD'];
 
-if (!$routeAction) {
-  http_response_code(404);
-  require_once 'app/views/404.php';
-  die();
-}
 
-$controllerPath = 'App\Controllers\\' . $routeAction['controller'];
-$controller =  new $controllerPath();
-$actionResult = $controller->{$routeAction['action']}();
+  //find matching route using regex
+  //search for the first matching route
+  $routeParameters = [];
+  $routeAction = current(array_filter(
+    Route::$allRoutes[$method],
+    function ($route) use ($requestUri, &$routeParameters) {
+      return preg_match("#$route#", $requestUri, $routeParameters);
+    },
+    ARRAY_FILTER_USE_KEY
+  ));
 
-if ($actionResult) {
-  header('Content-Type: application/json');
-  echo json_encode($actionResult);
+
+  if (!$routeAction) {
+    http_response_code(404);
+    require_once 'app/views/404.php';
+    die();
+  }
+
+
+  //remove first element from parameters array
+  array_shift($routeParameters);
+  $routeParameters = array_combine($routeAction->parameters, $routeParameters);
+
+  $controller =  $container->get('App\Controllers\\' . $routeAction->controller);
+  $actionResult = $container->call([$controller, $routeAction->method], $routeParameters);
+
+
+  if ($actionResult) {
+    header('Content-Type: application/json');
+    echo json_encode($actionResult);
+  }
+} catch (Exception $e) {
+  //pretty print error and call stack
+  http_response_code(500);
+  require_once 'app/views/error.php';
 }
