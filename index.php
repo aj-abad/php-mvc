@@ -43,8 +43,7 @@ try {
   $method = $_SERVER['REQUEST_METHOD'];
 
 
-  //find matching route using regex
-  //search for the first matching route
+  // find matching route using regex
   $routeParameters = [];
   $routeAction = current(array_filter(
     Route::$allRoutes[$method],
