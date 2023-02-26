@@ -2,9 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Modules\Request;
+use App\Modules\Response;
+use App\Modules\HttpStatusCode;
+
 class HomeController extends Controller
 {
-  public function index(Controller $controller)
+  public function index(Controller $controller) // to test dependency injection
   {
     $data = [
       "name" => $controller::class,
@@ -20,14 +24,17 @@ class HomeController extends Controller
   public function testJson()
   {
     $obj = ["Hello" => "World"];
-    return $this->json($obj);
+    return $this->json($obj); // to test json method
   }
 
-  public function test(Controller $controller, $id)
+  public function test(Controller $controller, $id) // to test dependency injection and route parameters
   {
     $data = [
       "id" => $id,
     ];
-    return $data;
+    Response::status(HttpStatusCode::CREATED);
+    Response::header("X-Test", "Hello World");
+    Response::cookie("test", "Hello World");
+    return $data; // to test auto json response
   }
 }
