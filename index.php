@@ -17,11 +17,10 @@ spl_autoload_register(
 
 // load resource from public folder if it exists
 if (isset($_GET["__path"])) {
-  $resource = "public/" . $_GET["__path"];
-  if (file_exists($resource)) {
+  if (file_exists("public/{$_GET['__path']}")) {
     $ext = pathinfo($resource, PATHINFO_EXTENSION);
     $mime = mime_content_type($resource);
-    header("Content-Type: " . $mime);
+    header("Content-Type: $mime");
     readfile($resource);
     die();
   }
@@ -65,7 +64,7 @@ try {
   array_shift($routeParameters);
   $routeParameters = array_combine($routeAction->parameters, $routeParameters);
 
-  $controller =  $container->get("App\Controllers\\" . $routeAction->controller);
+  $controller =  $container->get("App\Controllers\\$routeAction->controller");
   $actionResult = $container->call([$controller, $routeAction->method], $routeParameters);
 
 

@@ -4,26 +4,26 @@ namespace App\Modules;
 
 enum RequestMethod: string
 {
-  case GET = 'GET';
-  case POST = 'POST';
-  case PUT = 'PUT';
-  case DELETE = 'DELETE';
+  case GET = "GET";
+  case POST = "POST";
+  case PUT = "PUT";
+  case DELETE = "DELETE";
 }
 
 class Route
 {
   public static $allRoutes = [
-    'GET' => [],
-    'POST' => [],
-    'PUT' => [],
-    'DELETE' => []
+    "GET" => [],
+    "POST" => [],
+    "PUT" => [],
+    "DELETE" => []
   ];
 
   private static $namedRoutes = [];
 
-  public string $route = '';
-  public string $controller = '';
-  public string $method = '';
+  public string $route = "";
+  public string $controller = "";
+  public string $method = "";
 
   public array $parameters = [];
 
@@ -37,19 +37,19 @@ class Route
     $parameters = [];
 
     //convert route to regex and store parameters
-    $routeRegex = explode('/', $route);
+    $routeRegex = explode("/", $route);
     foreach ($routeRegex as $index => $routePart) {
-      if (str_starts_with($routePart, ':')) {
+      if (str_starts_with($routePart, ":")) {
         array_push($parameters, substr($routePart, 1));
-        $routeRegex[$index] = '(.+)';
+        $routeRegex[$index] = "(.+)";
       }
     }
-    $routeRegex = implode('/', $routeRegex);
+    $routeRegex = implode("/", $routeRegex);
     $routeRegex = "^{$routeRegex}$";
 
     //if route already exists
     if (array_key_exists($routeRegex, self::$allRoutes[$requestMethod->value])) {
-      throw new \Exception('Route already exists: ' . $route);
+      throw new \Exception("Route already exists: $route");
       die();
     }
 

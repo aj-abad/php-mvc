@@ -7,26 +7,26 @@ class HomeController extends Controller
   public function index(Controller $controller)
   {
     $data = [
-      'name' => $controller::class,
+      "name" => $controller::class,
     ];
-    return $this->view('home', $data);
+    return $this->view("home", $data);
   }
 
   public function about()
   {
-    return $this->view('about');
+    return $this->view("about");
   }
 
   public function testJson()
   {
-    $obj = ['Hello' => 'World'];
+    $obj = ["Hello" => "World"];
     return $this->json($obj);
   }
 
   public function test(Controller $controller, $id)
   {
     $data = [
-      'id' => $id,
+      "id" => $id,
     ];
     return $data;
   }

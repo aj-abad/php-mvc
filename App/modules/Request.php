@@ -6,7 +6,7 @@ class Request
 {
   public static function method(): string
   {
-    return $_SERVER['REQUEST_METHOD'];
+    return $_SERVER["REQUEST_METHOD"];
   }
 
   public static function get($key, $default = null)
