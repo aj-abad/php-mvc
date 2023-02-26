@@ -3,11 +3,11 @@
 use App\Modules\Route;
 
 // register class autoloaders
-require('vendor/autoload.php');
+require("vendor/autoload.php");
 spl_autoload_register(
   function ($class) {
-    $class_path = str_replace('\\', '/', $class);
-    $file =  '' . $class_path . '.php';
+    $class_path = str_replace("\\", "/", $class);
+    $file = $class_path . ".php";
     // if the file exists, require it
     if (file_exists($file)) {
       require $file;
@@ -15,13 +15,13 @@ spl_autoload_register(
   }
 );
 
-//load resource from public folder if it exists
-if (isset($_GET['__path'])) {
-  $resource = 'public/' . $_GET['__path'];
+// load resource from public folder if it exists
+if (isset($_GET["__path"])) {
+  $resource = "public/" . $_GET["__path"];
   if (file_exists($resource)) {
     $ext = pathinfo($resource, PATHINFO_EXTENSION);
     $mime = mime_content_type($resource);
-    header('Content-Type: ' . $mime);
+    header("Content-Type: " . $mime);
     readfile($resource);
     die();
   }
@@ -29,18 +29,18 @@ if (isset($_GET['__path'])) {
 
 try {
   // register routes
-  include 'routes/web.php';
-  include 'routes/api.php';
+  include "routes/web.php";
+  include "routes/api.php";
 
   // create dependency injection container for controllers
   $container = new DI\Container();
 
   // sanitize URI
-  $requestUri = $_SERVER['REQUEST_URI'];
-  $requestUri = rtrim($requestUri, '/');
-  $requestUri = preg_replace('/\/+/', '/', $requestUri);
-  $requestUri = explode('?', $requestUri)[0];
-  $method = $_SERVER['REQUEST_METHOD'];
+  $requestUri = $_SERVER["REQUEST_URI"];
+  $requestUri = rtrim($requestUri, "/");
+  $requestUri = preg_replace("/\/+/", "/", $requestUri);
+  $requestUri = explode("?", $requestUri)[0];
+  $method = $_SERVER["REQUEST_METHOD"];
 
 
   // find matching route using regex
@@ -56,25 +56,25 @@ try {
 
   if (!$routeAction) {
     http_response_code(404);
-    require_once 'app/views/404.php';
+    require_once "app/views/404.php";
     die();
   }
 
 
-  //remove first element from parameters array
+  // remove first element from parameters array
   array_shift($routeParameters);
   $routeParameters = array_combine($routeAction->parameters, $routeParameters);
 
-  $controller =  $container->get('App\Controllers\\' . $routeAction->controller);
+  $controller =  $container->get("App\Controllers\\" . $routeAction->controller);
   $actionResult = $container->call([$controller, $routeAction->method], $routeParameters);
 
 
   if ($actionResult) {
-    header('Content-Type: application/json');
+    header("Content-Type: application/json");
     echo json_encode($actionResult);
   }
 } catch (Exception $e) {
-  //pretty print error and call stack
+  // show pretty error page
   http_response_code(500);
-  require_once 'app/views/error.php';
+  require_once "app/views/error.php";
 }
