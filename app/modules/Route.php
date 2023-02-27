@@ -29,7 +29,12 @@ class Route
 
   public static function getNamed(string $name): Route
   {
-    return self::$namedRoutes[$name];
+    $route = @self::$namedRoutes[$name];
+    if (!$route) {
+      throw new \Exception("Named route not found: $name");
+      die();
+    }
+    return $route;
   }
 
   public static function register(RequestMethod $requestMethod, string $route, string $controller, string $method): Route
@@ -69,7 +74,7 @@ class Route
 
   public function named(string $name)
   {
-    self::$namedRoutes[$name] = $this->route;
+    self::$namedRoutes[$name] = $this;
     return $this;
   }
 }
