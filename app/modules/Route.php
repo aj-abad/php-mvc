@@ -74,6 +74,10 @@ class Route
 
   public function named(string $name)
   {
+    if (array_key_exists($name, self::$namedRoutes)) {
+      throw new \Exception("Named route already exists: $name");
+      die();
+    }
     self::$namedRoutes[$name] = $this;
     return $this;
   }
