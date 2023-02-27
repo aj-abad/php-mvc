@@ -77,5 +77,8 @@ $controller = new $controller();
 
 $actionResult = call_user_func_array([$controller, $routeAction->method], $routeParameters);
 
-$controller->{$routeAction->method}();
-// $actionResult = call_user_func_  array($controller->{$routeAction->method}, $routeParameters);
+if (is_array($actionResult)) {
+  header("Content-Type: application/json");
+  echo json_encode($actionResult);
+  die();
+}
