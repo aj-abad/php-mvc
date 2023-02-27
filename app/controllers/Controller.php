@@ -24,6 +24,15 @@ class Controller
     if (!isset($title) || gettype($title) !== "string") {
       $title = "Default title";
     }
+    if (!isset($styles) || gettype($styles) !== "string") {
+      $styles = $_SERVER["DOCUMENT_ROOT"] . "/app/views/partials/styles.php";
+    }
+    if (!isset($headScripts) || gettype($headScripts) !== "string") {
+      $headScripts = $_SERVER["DOCUMENT_ROOT"] . "/app/views/partials/headScripts.php";
+    }
+    if (!isset($bodyScripts) || gettype($bodyScripts) !== "string") {
+      $bodyScripts = $_SERVER["DOCUMENT_ROOT"] . "/app/views/partials/bodyScripts.php";
+    }
 
     require_once $_SERVER["DOCUMENT_ROOT"]  . "/app/layouts/{$this->layout}.php";
   }
