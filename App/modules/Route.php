@@ -45,7 +45,7 @@ class Route
       }
     }
     $routeRegex = implode("/", $routeRegex);
-    $routeRegex = "^{$routeRegex}$";
+    $routeRegex = "^{$routeRegex}\/*$";
 
     //if route already exists
     if (array_key_exists($routeRegex, self::$allRoutes[$requestMethod->value])) {
