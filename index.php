@@ -33,6 +33,7 @@ if (isset($_GET["__path"])) {
 }
 unset($_GET["__path"]);
 
+// TODO? find a better way to do this
 // register routes
 $routePrefix = "";
 include "routes/web.php";
