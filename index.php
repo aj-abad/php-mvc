@@ -75,6 +75,7 @@ $routeParameters = array_combine($routeAction->parameters, $routeParameters);
 $controller = "App\Controllers\\$routeAction->controller";
 $controller = new $controller();
 
+// call controller method with route parameters
 $actionResult = call_user_func_array([$controller, $routeAction->method], $routeParameters);
 
 if (is_array($actionResult)) {
