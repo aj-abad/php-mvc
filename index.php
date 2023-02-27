@@ -28,7 +28,10 @@ if (isset($_GET["__path"])) {
 unset($_GET["__path"]);
 
 // register routes
+$routePrefix = "";
 include "routes/web.php";
+$routePrefix = "api";
+// TODO implement api routes
 include "routes/api.php";
 
 // create dependency injection container for controllers
