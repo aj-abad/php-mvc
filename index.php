@@ -25,6 +25,7 @@ if (isset($_GET["__path"])) {
     die();
   }
 }
+unset($_GET["__path"]);
 
 try {
   // register routes
@@ -39,7 +40,6 @@ try {
   $requestUri = preg_replace("/\/+/", "/", $requestUri);
   $requestUri = explode("?", $requestUri)[0];
   $method = $_SERVER["REQUEST_METHOD"];
-
 
   // find matching route using regex
   $routeParameters = [];
