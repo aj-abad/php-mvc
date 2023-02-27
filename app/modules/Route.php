@@ -39,6 +39,8 @@ class Route
 
   public static function register(RequestMethod $requestMethod, string $route, string $controller, string $method): Route
   {
+    global $routePrefix;
+    $route = $routePrefix . $route;
     $parameters = [];
 
     //convert route to regex and store parameters

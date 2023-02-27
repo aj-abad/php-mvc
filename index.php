@@ -36,8 +36,7 @@ unset($_GET["__path"]);
 // register routes
 $routePrefix = "";
 include "routes/web.php";
-$routePrefix = "api";
-// TODO implement api routes
+$routePrefix = "/api";
 include "routes/api.php";
 
 // sanitize URI
@@ -72,7 +71,8 @@ array_shift($routeParameters);
 $routeParameters = array_combine($routeAction->parameters, $routeParameters);
 
 
-$controller = "App\Controllers\\$routeAction->controller";
+
+$controller = $routeAction->controller;
 $controller = new $controller();
 
 // call controller method with route parameters
