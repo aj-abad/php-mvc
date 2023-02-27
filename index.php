@@ -42,14 +42,15 @@ try {
   $method = $_SERVER["REQUEST_METHOD"];
 
   // find matching route using regex
-  $routeParameters = [];
-  $routeAction = current(array_filter(
+  $routeAction = (array_filter(
     Route::$allRoutes[$method],
-    function ($route) use ($requestUri, &$routeParameters) {
-      return preg_match("#$route#", $requestUri, $routeParameters);
+    function ($route) use ($requestUri) {
+      return preg_match("#$route#", $requestUri);
     },
     ARRAY_FILTER_USE_KEY
   ));
+  $routeRegex = array_key_first($routeAction);
+  $routeAction = current($routeAction);
 
 
   if (!$routeAction) {
@@ -58,9 +59,11 @@ try {
     die();
   }
 
-
-  // remove first element from parameters array
+  // get parameters from URI
+  $routeParameters = [];
+  preg_match("#$routeRegex#", $requestUri, $routeParameters);
   array_shift($routeParameters);
+
   $routeParameters = array_combine($routeAction->parameters, $routeParameters);
 
   $controller =  $container->get("App\Controllers\\$routeAction->controller");
