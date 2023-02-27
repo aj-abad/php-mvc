@@ -2,8 +2,7 @@
 
 use App\Modules\Route;
 
-// register class autoloaders
-require("vendor/autoload.php");
+// register class autoloader
 spl_autoload_register(
   function ($class) {
     $class_path = str_replace("\\", "/", $class);
@@ -17,10 +16,17 @@ spl_autoload_register(
 
 // load resource from public folder if it exists
 if (isset($_GET["__path"])) {
-  if (file_exists("public/{$_GET['__path']}")) {
+  $resource = "public/{$_GET['__path']}";
+  if (file_exists($resource)) {
     $ext = pathinfo($resource, PATHINFO_EXTENSION);
     $mime = mime_content_type($resource);
     header("Content-Type: $mime");
+    if ($ext == "css") {
+      header("Content-Type: text/css");
+    }
+    if ($ext == "js") {
+      header("Content-Type: text/javascript");
+    }
     readfile($resource);
     die();
   }
@@ -33,9 +39,6 @@ include "routes/web.php";
 $routePrefix = "api";
 // TODO implement api routes
 include "routes/api.php";
-
-// create dependency injection container for controllers
-$container = new DI\Container();
 
 // sanitize URI
 $requestUri = $_SERVER["REQUEST_URI"];
@@ -68,5 +71,10 @@ array_shift($routeParameters);
 
 $routeParameters = array_combine($routeAction->parameters, $routeParameters);
 
-$controller =  $container->get("App\Controllers\\$routeAction->controller");
-$actionResult = $container->call([$controller, $routeAction->method], $routeParameters);
+
+$controller = "App\Controllers\\$routeAction->controller";
+$controller = new $controller();
+
+
+$controller->{$routeAction->method}();
+// $actionResult = call_user_func_  array($controller->{$routeAction->method}, $routeParameters);
