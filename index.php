@@ -58,8 +58,13 @@ $routeAction = current($routeAction);
 
 
 if (!$routeAction) {
+  if ($method === "GET") {
+    http_response_code(404);
+    require_once "app/views/404.php";
+    die();
+  }
   http_response_code(404);
-  require_once "app/views/404.php";
+  echo json_encode(["error" => "No route found for $requestUri"]);
   die();
 }
 
