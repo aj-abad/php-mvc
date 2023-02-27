@@ -27,55 +27,46 @@ if (isset($_GET["__path"])) {
 }
 unset($_GET["__path"]);
 
-try {
-  // register routes
-  include "routes/web.php";
-  include "routes/api.php";
+// register routes
+include "routes/web.php";
+include "routes/api.php";
 
-  // create dependency injection container for controllers
-  $container = new DI\Container();
+// create dependency injection container for controllers
+$container = new DI\Container();
 
-  // sanitize URI
-  $requestUri = $_SERVER["REQUEST_URI"];
-  $requestUri = preg_replace("/\/+/", "/", $requestUri);
-  $requestUri = explode("?", $requestUri)[0];
-  $method = $_SERVER["REQUEST_METHOD"];
+// sanitize URI
+$requestUri = $_SERVER["REQUEST_URI"];
+$requestUri = preg_replace("/\/+/", "/", $requestUri);
+$requestUri = explode("?", $requestUri)[0];
+$method = $_SERVER["REQUEST_METHOD"];
 
-  // find matching route using regex
-  $routeAction = (array_filter(
-    Route::$allRoutes[$method],
-    function ($route) use ($requestUri) {
-      return preg_match("#$route#", $requestUri);
-    },
-    ARRAY_FILTER_USE_KEY
-  ));
-  $routeRegex = array_key_first($routeAction);
-  $routeAction = current($routeAction);
-
-
-  if (!$routeAction) {
-    http_response_code(404);
-    require_once "app/views/404.php";
-    die();
-  }
-
-  // get parameters from URI
-  $routeParameters = [];
-  preg_match("#$routeRegex#", $requestUri, $routeParameters);
-  array_shift($routeParameters);
-
-  $routeParameters = array_combine($routeAction->parameters, $routeParameters);
-
-  $controller =  $container->get("App\Controllers\\$routeAction->controller");
-  $actionResult = $container->call([$controller, $routeAction->method], $routeParameters);
+// find matching route using regex
+$routeAction = (array_filter(
+  Route::$allRoutes[$method],
+  function ($route) use ($requestUri) {
+    return preg_match("#$route#", $requestUri);
+  },
+  ARRAY_FILTER_USE_KEY
+));
+$routeRegex = array_key_first($routeAction);
+$routeAction = current($routeAction);
 
 
-  if ($actionResult) {
-    header("Content-Type: application/json");
-    echo json_encode($actionResult);
-  }
-} catch (Exception $e) {
-  // show pretty error page
-  http_response_code(500);
-  require_once "app/views/error.php";
+if (!$routeAction) {
+  http_response_code(404);
+  require_once "app/views/404.php";
+  die();
 }
+
+
+$xxx = Route::getNamed('home');
+
+// get parameters from URI
+$routeParameters = [];
+preg_match("#$routeRegex#", $requestUri, $routeParameters);
+array_shift($routeParameters);
+
+$routeParameters = array_combine($routeAction->parameters, $routeParameters);
+
+$controller =  $container->get("App\Controllers\\$routeAction->controller");
+$actionResult = $container->call([$controller, $routeAction->method], $routeParameters);
