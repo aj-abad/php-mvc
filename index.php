@@ -58,9 +58,6 @@ if (!$routeAction) {
   die();
 }
 
-
-$xxx = Route::getNamed('home');
-
 // get parameters from URI
 $routeParameters = [];
 preg_match("#$routeRegex#", $requestUri, $routeParameters);
