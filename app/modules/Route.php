@@ -24,6 +24,15 @@ class Route
   public string $route = "";
   public string $controller = "";
   public string $method = "";
+  public array $middleware = [];
+
+  public function __call($name, $arguments)
+  {
+    if ($name == "middleware") {
+      $this->middleware = $arguments[0];
+      return $this;
+    }
+  }
 
   public array $parameters = [];
 
@@ -81,6 +90,18 @@ class Route
       die();
     }
     self::$namedRoutes[$name] = $this;
+    return $this;
+  }
+
+  public function middleware(array $middleware)
+  {
+    foreach ($middleware as $middlewareClass) {
+      if (!class_exists($middlewareClass)) {
+        throw new \Exception("Middleware class not found: $middlewareClass");
+        die();
+      }
+      array_push($this->middleware, $middlewareClass);
+    }
     return $this;
   }
 }

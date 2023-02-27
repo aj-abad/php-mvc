@@ -80,9 +80,24 @@ $routeParameters = array_combine($routeAction->parameters, $routeParameters);
 $controller = $routeAction->controller;
 $controller = new $controller();
 
+//call pre middleware
+foreach ($routeAction->middleware as $middleware) {
+  $middleware = new $middleware();
+  $middlewareResult = $middleware->onBeforeExecute();
+  if ($middlewareResult) {
+    header("Content-Type: application/json");
+    echo json_encode($middlewareResult);
+    die();
+  }
+}
+
 // call controller method with route parameters
 $actionResult = call_user_func_array([$controller, $routeAction->method], $routeParameters);
-
+//call post middleware
+foreach ($routeAction->middleware as $middleware) {
+  $middleware = new $middleware();
+  $middleware->onAfterExecute();
+}
 if (is_array($actionResult)) {
   header("Content-Type: application/json");
   echo json_encode($actionResult);
