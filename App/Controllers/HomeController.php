@@ -23,7 +23,7 @@ class HomeController extends Controller
 
   public function testJson()
   {
-    $obj = ["Hello" => "World"];
+    $obj = Request::all();
     return $this->json($obj); // to test json method
   }
 
