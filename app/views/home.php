@@ -1,6 +1,8 @@
-<h1>
-  Home
-</h1>
-<p>
-  <?php echo $name; ?>
-</p>
+<div class="container">
+  <h1>
+    Home
+  </h1>
+  <p>
+    This is the home page
+  </p>
+</div>
