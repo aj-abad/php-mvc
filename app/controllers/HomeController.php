@@ -8,11 +8,9 @@ use App\Modules\HttpStatusCode;
 
 class HomeController extends Controller
 {
-  public function index(Controller $controller) // to test dependency injection
+  public function index()
   {
-    $data = [
-      "name" => $controller::class,
-    ];
+    $data = [];
     return $this->view("home", $data);
   }
 
@@ -24,10 +22,10 @@ class HomeController extends Controller
   public function testJson()
   {
     $obj = Request::all();
-    return $this->json($obj); // to test json method
+    return $this->json($obj);
   }
 
-  public function test(Controller $controller, $id) // to test dependency injection and route parameters
+  public function test($id)
   {
     $data = [
       "id" => $id,
