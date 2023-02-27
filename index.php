@@ -36,7 +36,6 @@ try {
 
   // sanitize URI
   $requestUri = $_SERVER["REQUEST_URI"];
-  $requestUri = rtrim($requestUri, "/");
   $requestUri = preg_replace("/\/+/", "/", $requestUri);
   $requestUri = explode("?", $requestUri)[0];
   $method = $_SERVER["REQUEST_METHOD"];
