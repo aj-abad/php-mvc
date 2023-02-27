@@ -67,9 +67,9 @@ enum HttpStatusCode: int
 
 class Response
 {
-  public static function status($code)
+  public static function status(HttpStatusCode $code)
   {
-    http_response_code($code);
+    http_response_code($code->value);
   }
 
   public static function header($key, $value)
