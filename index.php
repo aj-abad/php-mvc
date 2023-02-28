@@ -80,13 +80,15 @@ foreach ($routeAction->middleware as $middleware) {
   $middleware->onAfterExecute();
 }
 
-// display action result
-if (is_array($actionResult)) {
-  header("Content-Type: application/json");
-  echo json_encode($actionResult);
+// display view
+if (is_a($actionResult, View::class)) {
+  $actionResult->renderLayout();
   die();
 }
 
-if (is_a($actionResult, View::class)) {
-  $actionResult->renderLayout();
+// output json for any other result
+if (($actionResult)) {
+  header("Content-Type: application/json");
+  echo json_encode($actionResult);
+  die();
 }

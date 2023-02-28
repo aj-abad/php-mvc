@@ -29,6 +29,11 @@ use App\Modules\Route; ?>
             <a class="nav-link <?= Route::current()->name === 'about' ? 'active' : '' ?>" href="<?= Route::getNamed('about') ?>">About</a>
           </li>
         </ul>
+        <ul class="navbar-nav ms-md-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/api/test/1">API routes</a>
+          </li>
+        </ul>
       </nav>
     </div>
   </div>

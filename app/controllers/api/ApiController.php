@@ -17,6 +17,8 @@ class ApiController extends Controller
     Response::header("X-Hello", "World");
     Response::cookie("hello", "world", 3600);
     Response::status(HttpStatusCode::CREATED);
-    return $id;
+    return [
+      "id" => $id,
+    ];
   }
 }
