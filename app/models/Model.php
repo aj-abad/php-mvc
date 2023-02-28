@@ -19,4 +19,13 @@ class Model
       }
     }
   }
+
+  public function toArray(bool $fillableOnly = false)
+  {
+    $attributes = get_object_vars($this);
+    if ($fillableOnly) {
+      $attributes = array_intersect_key($attributes, array_flip($this->fillable));
+    }
+    return $attributes;
+  }
 }
