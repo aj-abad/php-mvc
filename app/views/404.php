@@ -1,3 +1,8 @@
+<?php
+
+use App\Modules\Route;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +20,7 @@
       Not found
     </h1>
     <p style="font-size: 2rem">
-      No route found for <code><?php echo htmlspecialchars($requestUri) ?></code>
+      No route found for <code><?= Route::getSanitizedUri() ?></code>
     </p>
   </div>
 </body>
