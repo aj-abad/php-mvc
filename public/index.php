@@ -6,7 +6,7 @@ use App\Modules\View;
 // register class autoloader
 spl_autoload_register(
   function ($class) {
-    $class_path = str_replace("\\", "/", $class);
+    $class_path = "../" . str_replace("\\", "/", $class);
     $file = $class_path . ".php";
     // if the file exists, require it
     if (file_exists($file)) {
@@ -17,31 +17,13 @@ spl_autoload_register(
 
 // enable CORS
 header("Access-Control-Allow-Origin: *");
-// load resource from public folder if it exists
-if (isset($_GET["__path"])) {
-  $resource = "public/{$_GET['__path']}";
-  if (file_exists($resource)) {
-    $ext = pathinfo($resource, PATHINFO_EXTENSION);
-    $mime = mime_content_type($resource);
-    header("Content-Type: $mime");
-    if ($ext == "css") {
-      header("Content-Type: text/css");
-    }
-    if ($ext == "js") {
-      header("Content-Type: text/javascript");
-    }
-    readfile($resource);
-    die();
-  }
-}
-unset($_GET["__path"]);
 
 // TODO? find a better way to handle route prefixes
 // register routes
 $routePrefix = "";
-include "routes/web.php";
+require "../routes/web.php";
 $routePrefix = "/api";
-include "routes/api.php";
+require "../routes/api.php";
 
 // find matching route using regex
 $routeAction = Route::current();
