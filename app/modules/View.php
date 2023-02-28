@@ -11,7 +11,7 @@ class View
 
   public array $sections = [
     "head" => "head",
-    "bodyScripts" => ""
+    "bodyScripts" => "bodyScripts"
   ];
 
   public static function make(string $viewName, array $viewData = []): View

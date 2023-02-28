@@ -38,8 +38,7 @@ use App\Modules\Route; ?>
     </div>
   </div>
   <?php $this->renderBody(); ?>
-  <?php //include $bodyScripts; 
-  ?>
+  <?php $this->renderSection("bodyScripts");  ?>
 </body>
 
 </html>
