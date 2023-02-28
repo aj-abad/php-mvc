@@ -1,7 +1,3 @@
-<?php
-
-use App\Modules\Route; ?>
-
 <div class="container">
   <h1>
     Home
@@ -10,6 +6,6 @@ use App\Modules\Route; ?>
     This is the home page
   </p>
   <p>
-    <a href="<?= Route::getNamed('about')->route ?>">About page</a>
+    <?= $this->data["hello"] ?>
   </p>
 </div>

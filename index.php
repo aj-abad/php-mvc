@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Route;
+use App\Modules\View;
 
 // register class autoloader
 spl_autoload_register(
@@ -100,8 +101,14 @@ foreach ($routeAction->middleware as $middleware) {
   $middleware = new $middleware();
   $middleware->onAfterExecute();
 }
+
+// handle action result
 if (is_array($actionResult)) {
   header("Content-Type: application/json");
   echo json_encode($actionResult);
   die();
+}
+
+if (is_a($actionResult, View::class)) {
+  $actionResult->renderLayout();
 }
