@@ -40,6 +40,9 @@ $currentRoute = Route::current();
     <div class="mb-2">
       <input type="text" name="email" class="form-control" placeholder="Email" aria-label="Email" />
     </div>
+    <div class="mb-2">
+      <input type="text" name="password" class="form-control" placeholder="Password" aria-label="Password" />
+    </div>
     <button type="submit" class="btn btn-primary">
       Save
     </button>

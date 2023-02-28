@@ -8,6 +8,7 @@ use App\Modules\Response;
 use App\Modules\HttpStatusCode;
 use App\Modules\View;
 use App\Models;
+use App\Modules\Hash;
 use App\Modules\Route;
 
 class HomeController extends Controller
@@ -37,7 +38,8 @@ class HomeController extends Controller
   {
     $all = Request::all();
     $user = new Models\User(Request::all());
-    DB::query("INSERT INTO users (name, email, password) VALUES (:name, :email, '123213123')", get_object_vars($user));
+    $user->password = Hash::make($user->password);
+    DB::query("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)", $user->toArray());
     Response::header("Location", Route::getNamed("home"));
     Response::status(HttpStatusCode::FOUND);
     return null;
