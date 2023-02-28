@@ -57,7 +57,7 @@ class Route
     return $routeParameters;
   }
 
-  public static function current()
+  public static function current(): ?Route
   {
     $uri = self::getSanitizedUri();
     $route = (array_filter(
@@ -129,7 +129,7 @@ class Route
     return $routeInstance;
   }
 
-  public function named(string $name)
+  public function named(string $name): Route
   {
     if (array_key_exists($name, self::$namedRoutes)) {
       throw new \Exception("Named route already exists: $name");
@@ -140,7 +140,7 @@ class Route
     return $this;
   }
 
-  public function middleware(array $middleware)
+  public function middleware(array $middleware): Route
   {
     foreach ($middleware as $middlewareClass) {
       if (!class_exists($middlewareClass)) {
