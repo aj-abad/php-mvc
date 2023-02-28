@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Route;
+use App\Modules\DotEnv;
 use App\Modules\View;
 
 // register class autoloader
@@ -15,8 +16,11 @@ spl_autoload_register(
   }
 );
 
+// register environment variables
+DotEnv::load();
+
 // enable CORS
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-O6rigin: *");
 
 // TODO? find a better way to handle route prefixes
 // register routes
