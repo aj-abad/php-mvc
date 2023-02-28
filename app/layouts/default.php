@@ -23,10 +23,10 @@ use App\Modules\Route; ?>
       <nav class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="<?= Route::getNamed('home') ?>">Home</a>
+            <a class="nav-link <?= Route::current()->name === 'home' ? 'active' : '' ?>" href="<?= Route::getNamed('home') ?>">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?= Route::getNamed('about') ?>">About</a>
+            <a class="nav-link <?= Route::current()->name === 'about' ? 'active' : '' ?>" href="<?= Route::getNamed('about') ?>">About</a>
           </li>
         </ul>
       </nav>
