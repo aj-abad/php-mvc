@@ -24,6 +24,7 @@ class Route
   public string $route = "";
   public string $controller = "";
   public string $method = "";
+  public string $pattern = "";
   public array $middleware = [];
 
   public function __call($name, $arguments)
@@ -36,14 +37,67 @@ class Route
 
   public array $parameters = [];
 
-  public static function getNamed(string $name): Route
+  public static function getSanitizedUri(): string
+  {
+    $requestUri = $_SERVER["REQUEST_URI"];
+    $requestUri = preg_replace("/\/+/", "/", $requestUri);
+    $requestUri = explode("?", $requestUri)[0];
+
+    return $requestUri;
+  }
+
+  public static function getCurrentRouteParameters(): array
+  {
+    $routeParameters = [];
+    $currentRoute = self::current();
+    preg_match("#{$currentRoute->pattern}#", self::getSanitizedUri(), $routeParameters);
+    array_shift($routeParameters);
+    $routeParameters = array_combine($currentRoute->parameters, $routeParameters);
+    return $routeParameters;
+  }
+
+  public static function current()
+  {
+    $uri = self::getSanitizedUri();
+    $route = (array_filter(
+      Route::$allRoutes[$_SERVER["REQUEST_METHOD"]],
+      function ($route) use ($uri) {
+        return preg_match("#$route#", $uri);
+      },
+      ARRAY_FILTER_USE_KEY
+    ));
+
+    if (count($route) == 0) {
+      return null;
+    }
+
+    return array_values($route)[0];
+
+
+
+
+
+    return $route;
+  }
+
+  public static function getNamed(string $name, array $parameters = []): string
   {
     $route = @self::$namedRoutes[$name];
     if (!$route) {
       throw new \Exception("Named route not found: $name");
       die();
     }
-    return $route;
+
+    //replace route parts with parameters
+    $routeParts = explode("/", $route->route);
+    foreach ($routeParts as $index => $routePart) {
+      if (str_starts_with($routePart, ":")) {
+        $routeParts[$index] = $parameters[substr($routePart, 1)];
+      }
+    }
+    $routeWithParameters = implode("/", $routeParts);
+
+    return $routeWithParameters;
   }
 
   public static function register(RequestMethod $requestMethod, string $route, string $controller, string $method): Route
@@ -69,18 +123,14 @@ class Route
       die();
     }
 
-    $routeInstance = new Route($route, $controller, $method, $parameters);
-
+    $routeInstance = new Route();
+    $routeInstance->route = $route;
+    $routeInstance->controller = $controller;
+    $routeInstance->method = $method;
+    $routeInstance->pattern = $routeRegex;
+    $routeInstance->parameters = $parameters;
     self::$allRoutes[$requestMethod->value][$routeRegex] = $routeInstance;
     return $routeInstance;
-  }
-
-  public function __construct(string $route, string $controller, string $method, $parameters = [])
-  {
-    $this->route = $route;
-    $this->controller = $controller;
-    $this->method = $method;
-    $this->parameters = $parameters;
   }
 
   public function named(string $name)
