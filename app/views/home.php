@@ -29,4 +29,19 @@ $currentRoute = Route::current();
         </tr>
       <?php endforeach; ?>
   </table>
+
+  <form action="<?= Route::getNamed('home.post')  ?>" method="POST">
+    <h2>
+      Create new user
+    </h2>
+    <div class="mb-2">
+      <input type="text" name="name" class="form-control" placeholder="Name" aria-label="Name" />
+    </div>
+    <div class="mb-2">
+      <input type="text" name="email" class="form-control" placeholder="Email" aria-label="Email" />
+    </div>
+    <button type="submit" class="btn btn-primary">
+      Save
+    </button>
+  </form>
 </div>

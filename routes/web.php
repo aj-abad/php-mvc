@@ -5,3 +5,4 @@ use App\Modules\Route;
 
 Route::register(RequestMethod::GET, "/", HomeController::class, "index")->named("home");
 Route::register(RequestMethod::GET, "/about", HomeController::class, "about")->named("about");
+Route::register(RequestMethod::POST, "/", HomeController::class, "create")->named("home.post");
