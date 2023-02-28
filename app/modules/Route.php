@@ -25,6 +25,7 @@ class Route
   public string $controller = "";
   public string $method = "";
   public string $pattern = "";
+  public string $name = "";
   public array $middleware = [];
 
   public function __call($name, $arguments)
@@ -72,11 +73,6 @@ class Route
     }
 
     return array_values($route)[0];
-
-
-
-
-
     return $route;
   }
 
@@ -139,6 +135,7 @@ class Route
       throw new \Exception("Named route already exists: $name");
       die();
     }
+    $this->name = $name;
     self::$namedRoutes[$name] = $this;
     return $this;
   }
