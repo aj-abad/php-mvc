@@ -15,6 +15,7 @@ spl_autoload_register(
 );
 
 // load resource from public folder if it exists
+header("Access-Control-Allow-Origin: *");
 if (isset($_GET["__path"])) {
   $resource = "public/{$_GET['__path']}";
   if (file_exists($resource)) {
