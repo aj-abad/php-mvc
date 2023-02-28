@@ -34,7 +34,7 @@ if (isset($_GET["__path"])) {
 }
 unset($_GET["__path"]);
 
-// TODO? find a better way to do this
+// TODO? find a better way to handle route prefixes
 // register routes
 $routePrefix = "";
 include "routes/web.php";
