@@ -4,7 +4,7 @@ namespace App\Modules;
 
 class View
 {
-  public array $data = [];
+  public array $viewData = [];
   public string $layout = "default";
   public string $view = "";
   public string $title = "Default title";
@@ -14,21 +14,26 @@ class View
     "bodyScripts" => ""
   ];
 
-  public static function make(string $viewName, array $data = []): View
+  public static function make(string $viewName, array $viewData = []): View
   {
     $view = new View();
     $view->view = $viewName;
-    //sanitize data recursively
-    $dataSanitized = array_map(function ($value) {
-      if (is_object($value)) {
-        return array_map(function ($value) {
-          return htmlspecialchars($value, ENT_QUOTES);
-        }, $value);
+
+    // function for recursive data sanitizing
+    $recursiveSanitize = function ($arr) use (&$recursiveSanitize) {
+      foreach ($arr as $key => $value) {
+        if (is_array($value)) {
+          $arr[$key] = $recursiveSanitize($value);
+        } else {
+          $arr[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE);
+        }
       }
-      
-      return htmlspecialchars($value, ENT_QUOTES);
-    }, $data);
-    $view->data = $dataSanitized;
+      return $arr;
+    };
+
+    $dataSanitized = $recursiveSanitize($viewData);
+
+    $view->viewData = $dataSanitized;
     return $view;
   }
 
