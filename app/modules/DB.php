@@ -16,7 +16,18 @@ class DB
   public static function query($sql, $params = [])
   {
     $stmt = self::connect()->prepare($sql);
-    $queryResult = $stmt->execute($params);
+    // get parameters in sql query
+    $stmtParams = [];
+    preg_match_all("/:(\w+)/", $sql, $stmtParams);
+    $stmtParams = @$stmtParams[1] ?: [];
+    $neededParams = [];
+    foreach ($stmtParams as $param) {
+      if (isset($params[$param])) {
+        $neededParams[$param] = $params[$param];
+      }
+    }
+
+    $queryResult = $stmt->execute($neededParams);
     if ($queryResult) {
       return $stmt->fetchAll();
     }
