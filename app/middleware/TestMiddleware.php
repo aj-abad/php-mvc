@@ -11,11 +11,11 @@ class TestMiddleware implements Middleware
   public function onBeforeExecute()
   {
     Response::header("X-Before", "test");
-    Response::status(HttpStatusCode::FORBIDDEN);
+    // Response::status(HttpStatusCode::FORBIDDEN);
 
-    return [
-      "test" => "test"
-    ];
+    // return [
+    //   "test" => "test"
+    // ];
   }
 
   public function onAfterExecute()
