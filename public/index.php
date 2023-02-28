@@ -16,6 +16,14 @@ spl_autoload_register(
   }
 );
 
+// if php://input is valid json, combine it with $_POST
+if (isset($_SERVER["CONTENT_TYPE"]) && $_SERVER["CONTENT_TYPE"] === "application/json") {
+  $json = json_decode(file_get_contents("php://input"), true);
+  if ($json) {
+    $_POST = array_merge($_POST, $json);
+  }
+}
+
 // register environment variables
 DotEnv::load();
 
@@ -73,8 +81,6 @@ if (is_a($actionResult, View::class)) {
 }
 
 // output json for any other result
-if (($actionResult)) {
-  header("Content-Type: application/json");
-  echo json_encode($actionResult);
-  die();
-}
+header("Content-Type: application/json");
+echo json_encode($actionResult);
+die();
