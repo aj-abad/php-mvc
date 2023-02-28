@@ -57,7 +57,7 @@ class Route
     foreach ($routeRegex as $index => $routePart) {
       if (str_starts_with($routePart, ":")) {
         array_push($parameters, substr($routePart, 1));
-        $routeRegex[$index] = "(.+)";
+        $routeRegex[$index] = "([^/]+)";
       }
     }
     $routeRegex = implode("/", $routeRegex);
