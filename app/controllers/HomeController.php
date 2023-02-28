@@ -15,10 +15,6 @@ class HomeController extends Controller
 {
   public function index()
   {
-    $data = [
-      "hello" => "world"
-    ];
-
     $usersData = DB::query("SELECT * FROM users");
     $usersData = array_map(function ($user) {
       return new Models\User($user);
@@ -36,7 +32,6 @@ class HomeController extends Controller
 
   public function create()
   {
-    $all = Request::all();
     $user = new Models\User(Request::all());
     $user->password = Hash::make($user->password);
     DB::query("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)", $user->toArray());
