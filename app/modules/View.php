@@ -24,8 +24,15 @@ class View
       foreach ($arr as $key => $value) {
         if (is_array($value)) {
           $arr[$key] = $recursiveSanitize($value);
-        } else {
+          continue;
+        }
+        if (is_object($value)) {
+          $arr[$key] = $recursiveSanitize(get_object_vars($value));
+          continue;
+        }
+        if (is_string($value)) {
           $arr[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE);
+          continue;
         }
       }
       return $arr;
