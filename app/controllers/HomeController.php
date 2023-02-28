@@ -15,12 +15,12 @@ class HomeController extends Controller
       "hello" => "world"
     ];
     return View::make("home", $data)
-      ->layout("default")
       ->title("Home page");
   }
 
   public function about()
   {
-    return new View("about");
+    return View::make("about")
+      ->title("About page");
   }
 }
