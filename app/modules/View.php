@@ -64,6 +64,7 @@ class View
   public function renderBody()
   {
     require_once $_SERVER["DOCUMENT_ROOT"] . "/app/views/{$this->view}.php";
+    FlashMessages::clear();
   }
 
   public function title(string $title): View
