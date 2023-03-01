@@ -1,11 +1,19 @@
 <?php
 
+use App\Modules\FlashMessages;
 use App\Modules\Route;
+use App\Modules\View;
 
 $currentRoute = Route::current();
 ?>
 
 <div class="container py-4">
+  <?php if (FlashMessages::get("success")) : ?>
+    <div class="alert alert-success" role="alert">
+      <?= FlashMessages::get("success") ?>
+    </div>
+  <?php endif; ?>
+
   <h1>
     Home
   </h1>
