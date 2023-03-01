@@ -30,6 +30,9 @@ DotEnv::load();
 // enable CORS
 header("Access-Control-Allow-O6rigin: *");
 
+// start session securely and make it last for 12 hours
+session_start(['cookie_lifetime' => 3600 * 12, 'cookie_secure' => true, 'cookie_httponly' => true]);
+
 // TODO? find a better way to handle route prefixes
 // register routes
 $routePrefix = "";
