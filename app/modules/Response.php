@@ -72,9 +72,9 @@ class Response
     http_response_code($code->value);
   }
 
-  public static function header($key, $value)
+  public static function header($key, $value, $replace = true)
   {
-    header("$key: $value");
+    header("$key: $value", $replace);
   }
 
   public static function cookie($key, $value, $expire = 0, $path = "/", $domain = "", $secure = false, $httponly = false)
