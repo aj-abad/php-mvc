@@ -23,7 +23,18 @@ class Request
   {
     return array_merge($_GET, $_POST);
   }
-  
+
+  public static function header($key, $default = null): string
+  {
+    $key = strtoupper(str_replace("-", "_", $key));
+    return @$_SERVER["HTTP_$key"] ?? $default;
+  }
+
+  public static function cookie($key, $default = null): string
+  {
+    return @$_COOKIE[$key] ?? $default;
+  }
+
   public static function some(array $keys): array
   {
     $result = [];
