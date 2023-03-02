@@ -18,4 +18,9 @@ class Auth
   {
     return @$_SESSION["user"] ?? null;
   }
+
+  public static function logout()
+  {
+    unset($_SESSION["user"]);
+  }
 }
