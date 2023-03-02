@@ -13,6 +13,11 @@ $currentRoute = Route::current();
       <?= FlashMessages::get("success") ?>
     </div>
   <?php endif; ?>
+  <?php if (FlashMessages::get("error")) : ?>
+    <div class="alert alert-danger" role="alert">
+      <?= FlashMessages::get("error") ?>
+    </div>
+  <?php endif; ?>
 
   <h1>
     Home
@@ -53,6 +58,24 @@ $currentRoute = Route::current();
     </div>
     <button type="submit" class="btn btn-primary">
       Save
+    </button>
+  </form>
+  <div class="py-4">
+  </div>
+  <form action="<?= Route::getNamed('signin') ?>" method="POST">
+    <h3>
+      Sign in
+    </h3>
+    <div class="mb-2">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" class="form-control">
+    </div>
+    <div class="mb-2">
+      <label for="password">Password</label>
+      <input type="text" id="password" name="password" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-warning">
+      Sign in
     </button>
   </form>
 </div>

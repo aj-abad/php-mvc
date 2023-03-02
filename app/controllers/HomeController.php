@@ -31,6 +31,25 @@ class HomeController extends Controller
       ->title("About page");
   }
 
+  public function signIn()
+  {
+    $name = Request::post("name");
+    $password = Request::post("password");
+
+    $user = DB::query("SELECT * FROM users WHERE name = :name", ["name" => $name]);
+    if (!$user) {
+      FlashMessages::set("error", "User not found");
+      return Response::redirect(Route::getNamed("home"));
+    }
+    $user = new Models\User($user[0]);
+    if (!Hash::verify($password, $user->password)) {
+      FlashMessages::set("error", "Invalid password");
+      return Response::redirect(Route::getNamed("home"));
+    }
+    Auth::login($user->toArray());
+    return Response::redirect(Route::getNamed("home"));
+  }
+
   public function create()
   {
     $user = new Models\User(Request::all());

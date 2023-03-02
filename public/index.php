@@ -2,6 +2,7 @@
 
 use App\Modules\Route;
 use App\Modules\DotEnv;
+use App\Modules\FlashMessages;
 use App\Modules\View;
 
 // register class autoloader
@@ -41,9 +42,10 @@ $routePrefix = "/api";
 require "../routes/api.php";
 
 // find matching route using regex
-$routeAction = Route::current();
+$matchedRoute = Route::current();
 
-if (!$routeAction) {
+// handle 404
+if (!$matchedRoute) {
   if ($_SERVER["REQUEST_METHOD"] === "GET") {
     http_response_code(404);
     require_once "../app/views/404.php";
@@ -55,24 +57,28 @@ if (!$routeAction) {
 }
 
 // get parameters from URI
-$controller = $routeAction->controller;
+$controller = $matchedRoute->controller;
 $controller = new $controller();
 
+$actionResult = null;
+
 // call pre middleware
-foreach ($routeAction->middleware as $middleware) {
+foreach ($matchedRoute->middleware as $middleware) {
   $middleware = new $middleware();
   $middlewareResult = $middleware->onBeforeExecute();
   if ($middlewareResult) {
-    header("Content-Type: application/json");
-    echo json_encode($middlewareResult);
-    die();
+    $actionResult = $middlewareResult;
+    break;
   }
 }
 
-// call controller method with route parameters
-$actionResult = call_user_func_array([$controller, $routeAction->method], Route::getCurrentRouteParameters());
+if (!$actionResult) {
+  // call controller method with route parameters
+  $actionResult = call_user_func_array([$controller, $matchedRoute->method], Route::getCurrentRouteParameters());
+}
+
 // call post middleware
-foreach ($routeAction->middleware as $middleware) {
+foreach ($matchedRoute->middleware as $middleware) {
   $middleware = new $middleware();
   $middleware->onAfterExecute();
 }
@@ -80,6 +86,7 @@ foreach ($routeAction->middleware as $middleware) {
 // display view
 if (is_a($actionResult, View::class)) {
   $actionResult->renderLayout();
+  FlashMessages::clear();
   die();
 }
 
