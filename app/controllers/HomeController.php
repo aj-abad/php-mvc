@@ -52,11 +52,14 @@ class HomeController extends Controller
 
   public function create()
   {
-    $user = new Models\User(Request::all());
+    $body = Request::all();
+    $user = new Models\User($body);
+    foreach(get_object_vars($user) as $key => $value) {
+      $user->$key = trim($value);
+    }
     $user->password = Hash::make($user->password);
     DB::query("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)", $user->toArray());
     FlashMessages::set("success", "New user added successfully");
-    Response::status(HttpStatusCode::SEE_OTHER);
-    Response::header("Location", Route::getNamed("home"));
+    return Response::redirect(Route::getNamed("home"));
   }
 }
