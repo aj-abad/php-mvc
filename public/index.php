@@ -91,6 +91,6 @@ if (is_a($actionResult, View::class)) {
 }
 
 // output json for any other result
-header("Content-Type: application/json");
+Response::header("Content-Type", "application/json");
 echo json_encode($actionResult);
 die();
