@@ -91,7 +91,7 @@ class Response
     setcookie($key, $value, $expire, $path, $domain, $secure, $httponly);
   }
 
-  public static function redirect(string $route)
+  public static function redirect(string $route): RedirectResponse
   {
     self::status(HttpStatusCode::SEE_OTHER);
     self::header("Location", $route);
