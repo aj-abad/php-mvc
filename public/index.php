@@ -4,6 +4,7 @@ use App\Modules\Route;
 use App\Modules\DotEnv;
 use App\Modules\FlashMessages;
 use App\Modules\View;
+use App\Modules\Response;
 
 // register class autoloader
 spl_autoload_register(
@@ -72,8 +73,8 @@ foreach ($matchedRoute->middleware as $middleware) {
   }
 }
 
+// proceed to controller method if request is not intercepted by middleware
 if (!$actionResult) {
-  // call controller method with route parameters
   $actionResult = call_user_func_array([$controller, $matchedRoute->method], Route::getCurrentRouteParameters());
 }
 
