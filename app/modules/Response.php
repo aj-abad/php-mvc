@@ -65,6 +65,15 @@ enum HttpStatusCode: int
   case SERVICE_UNAVAILABLE = 503;
 }
 
+class RedirectResponse
+{
+  public string $route;
+  public function __construct(string $route)
+  {
+    $this->route = $route;
+  }
+}
+
 class Response
 {
   public static function status(HttpStatusCode $code)
@@ -80,5 +89,12 @@ class Response
   public static function cookie($key, $value, $expire = 0, $path = "/", $domain = "", $secure = false, $httponly = false)
   {
     setcookie($key, $value, $expire, $path, $domain, $secure, $httponly);
+  }
+
+  public static function redirect(string $route)
+  {
+    self::status(HttpStatusCode::SEE_OTHER);
+    self::header("Location", $route);
+    return new RedirectResponse($route);
   }
 }
