@@ -1,6 +1,8 @@
 <?php
 
-use App\Modules\Route; ?>
+use App\Modules\Route;
+use App\Modules\Auth;
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,6 +32,13 @@ use App\Modules\Route; ?>
           </li>
         </ul>
         <ul class="navbar-nav ms-md-auto">
+          <?php if (Auth::isLoggedIn()) : ?>
+            <li class="nav-item">
+              <span class="nav-link">
+                <?= Auth::user()['name'] ?>
+              </span>
+            </li>
+          <?php endif; ?>
           <li class="nav-item">
             <a class="nav-link" href="/api/test/1">API routes</a>
           </li>
