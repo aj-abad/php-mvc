@@ -55,7 +55,7 @@ class HomeController extends Controller
   {
     $body = Request::all();
     $user = new Models\User($body);
-    foreach(get_object_vars($user) as $key => $value) {
+    foreach (get_object_vars($user) as $key => $value) {
       $user->$key = trim($value);
     }
     $user->password = Hash::make($user->password);
