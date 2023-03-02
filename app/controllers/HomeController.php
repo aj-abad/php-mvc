@@ -11,6 +11,7 @@ use App\Models;
 use App\Modules\FlashMessages;
 use App\Modules\Hash;
 use App\Modules\Route;
+use App\Modules\Auth;
 
 class HomeController extends Controller
 {
